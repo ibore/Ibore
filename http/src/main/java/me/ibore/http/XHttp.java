@@ -2,9 +2,11 @@ package me.ibore.http;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
+import me.ibore.http.request.GetRequest;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
 
 /**
  * Created by Administrator on 2017/5/25.
@@ -13,9 +15,20 @@ import okhttp3.Request;
 public class XHttp {
 
     private static Application context;
+
+    public Handler getDelivery() {
+        return mDelivery;
+    }
+
+    private Handler mDelivery;
     private OkHttpClient.Builder okHttpClientBuilder;           //ok请求的客户端
     private OkHttpClient okHttpClient;                          //ok请求的客户端
     private static XHttp xHttp;
+
+    public XHttp() {
+        okHttpClientBuilder = new OkHttpClient.Builder();
+        mDelivery = new Handler(Looper.getMainLooper());
+    }
 
     /** 必须在全局Application先调用，获取context上下文，否则缓存无法使用 */
     public static void init(Application app) {
@@ -23,10 +36,8 @@ public class XHttp {
     }
 
     public static XHttp getInstance() {
-        synchronized (xHttp) {
-            if (null == xHttp) {
-                xHttp = new XHttp();
-            }
+        if (null == xHttp) {
+            xHttp = new XHttp();
         }
         return xHttp;
     }
@@ -41,11 +52,12 @@ public class XHttp {
     }
 
     public OkHttpClient getOkHttpClient() {
+        if (okHttpClient == null) okHttpClient = okHttpClientBuilder.build();
         return okHttpClient;
     }
 
 
-    public static Request.Builder get() {
-        return new Request.Builder();
+    public static GetRequest get(String url) {
+        return new GetRequest(url);
     }
 }
