@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import me.ibore.http.XHttp;
+import okhttp3.Request;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,7 +30,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        XHttp.get().url("http://www.so.com").build();
+        Request request = new Request.Builder()
+                .url("http://www.so.com")
+                .get()
+                .build();
+
+        XHttp.get("http://www.so.com").;
     }
 
     @Override
