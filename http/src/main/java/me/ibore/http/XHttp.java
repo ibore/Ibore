@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
+import me.ibore.http.interceptor.HttpLoggingInterceptor;
 import me.ibore.http.request.GetRequest;
 import okhttp3.OkHttpClient;
 
@@ -15,11 +16,6 @@ import okhttp3.OkHttpClient;
 public class XHttp {
 
     private static Application context;
-
-    public Handler getDelivery() {
-        return mDelivery;
-    }
-
     private Handler mDelivery;
     private OkHttpClient.Builder okHttpClientBuilder;           //ok请求的客户端
     private OkHttpClient okHttpClient;                          //ok请求的客户端
@@ -41,6 +37,20 @@ public class XHttp {
         }
         return xHttp;
     }
+
+
+    public Handler getDelivery() {
+        return mDelivery;
+    }
+
+    public XHttp debug(final String tag) {
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(
+                HttpLoggingInterceptor.Logger.DEFAULT);
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        okHttpClientBuilder.addInterceptor(loggingInterceptor);
+        return this;
+    }
+
     /** 获取全局上下文 */
     public static Context getContext() {
         if (context == null) throw new IllegalStateException("请先在全局Application中调用 OkGo.init() 初始化！");
@@ -55,7 +65,6 @@ public class XHttp {
         if (okHttpClient == null) okHttpClient = okHttpClientBuilder.build();
         return okHttpClient;
     }
-
 
     public static GetRequest get(String url) {
         return new GetRequest(url);

@@ -5,7 +5,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,7 +33,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        XHttp.get("http://www.so.com").enqueue(new StringCallback() {
+        XHttp.get("http://apicloud.mob.com/v1/weather/query")
+                .param("key", "")
+                .param("city", "海淀区")
+                .param("province", "北京")
+                .execute(new StringCallback() {
             @Override
             public void onStart(BaseRequest request) {
                 super.onStart(request);
@@ -43,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(String s) {
-                Log.d("----", s);
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
             }
 
@@ -55,9 +57,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onComplete() {
                 super.onComplete();
-//                Toast.makeText(getApplicationContext(), "结束了", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "结束了", Toast.LENGTH_SHORT).show();
             }
         });
+
+
     }
 
     @Override

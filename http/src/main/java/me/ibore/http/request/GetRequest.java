@@ -1,10 +1,13 @@
 package me.ibore.http.request;
 
+import java.io.IOException;
+
 import me.ibore.http.call.AbsCall;
 import me.ibore.http.callback.AbsCallback;
 import okhttp3.CacheControl;
 import okhttp3.Headers;
 import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by Administrator on 2017/5/25.
@@ -12,7 +15,8 @@ import okhttp3.Request;
 
 public class GetRequest implements BaseRequest {
 
-    private final Request.Builder builder;
+    private Request.Builder builder;
+    private String url;
 
     private volatile CacheControl cacheControl; // Lazily initialized.
 
@@ -20,7 +24,7 @@ public class GetRequest implements BaseRequest {
 
     public GetRequest(String url) {
         builder = new Request.Builder();
-        builder.url(url);
+        this.url = url;
     }
 
     public GetRequest headers(Headers headers) {
@@ -37,9 +41,28 @@ public class GetRequest implements BaseRequest {
         return AbsCall.create(baseRequest, request);
     }
 
-    public void enqueue(AbsCallback absCallback) {
+
+    @Override
+    public BaseRequest header(String key, String value) {
+        builder.header(key, value);
+        return this;
+    }
+
+
+    @Override
+    public void execute(AbsCallback absCallback) {
         request = builder.build();
         getCall(this, request).enqueue(absCallback);
     }
 
+    @Override
+    public Response execute() throws IOException {
+        request = builder.build();
+        return getCall(this, request).execute();
+    }
+
+    @Override
+    public BaseRequest param(String key, String s) {
+        return this;
+    }
 }

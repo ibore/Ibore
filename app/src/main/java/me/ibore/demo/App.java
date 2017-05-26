@@ -14,5 +14,6 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         XHttp.init(this);
+        XHttp.getInstance().debug("XHttp");
     }
 }

@@ -1,5 +1,10 @@
 package me.ibore.http.request;
 
+import java.io.IOException;
+
+import me.ibore.http.callback.AbsCallback;
+import okhttp3.Response;
+
 /**
  * description:
  * author: Ibore Xie
@@ -8,4 +13,9 @@ package me.ibore.http.request;
  */
 
 public interface BaseRequest {
+    BaseRequest header(String key, String value);
+    void execute(AbsCallback absCallback);
+    Response execute() throws IOException;
+
+    BaseRequest param(String key, String s);
 }
