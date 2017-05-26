@@ -5,8 +5,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
-import java.util.concurrent.TimeUnit;
-
 import me.ibore.http.request.GetRequest;
 import okhttp3.OkHttpClient;
 
@@ -16,31 +14,20 @@ import okhttp3.OkHttpClient;
 
 public class XHttp {
 
-    public static final int DEFAULT_MILLISECONDS = 60000;       //默认的超时时间
-
     private static Application context;
+
+    public Handler getDelivery() {
+        return mDelivery;
+    }
 
     private Handler mDelivery;
     private OkHttpClient.Builder okHttpClientBuilder;           //ok请求的客户端
     private OkHttpClient okHttpClient;                          //ok请求的客户端
     private static XHttp xHttp;
 
-
-    public static GetRequest.Builder get(String url) {
-        return new GetRequest.Builder(url);
-    }
-
-    private XHttp() {
+    public XHttp() {
         okHttpClientBuilder = new OkHttpClient.Builder();
-//        okHttpClientBuilder.hostnameVerifier(HttpsUtils.UnSafeHostnameVerifier);
-        okHttpClientBuilder.connectTimeout(DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
-        okHttpClientBuilder.readTimeout(DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
-        okHttpClientBuilder.writeTimeout(DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
         mDelivery = new Handler(Looper.getMainLooper());
-    }
-
-    public Handler getDelivery() {
-        return mDelivery;
     }
 
     /** 必须在全局Application先调用，获取context上下文，否则缓存无法使用 */
@@ -65,9 +52,12 @@ public class XHttp {
     }
 
     public OkHttpClient getOkHttpClient() {
-        if (null == okHttpClient) okHttpClient = okHttpClientBuilder.build();
+        if (okHttpClient == null) okHttpClient = okHttpClientBuilder.build();
         return okHttpClient;
     }
 
 
+    public static GetRequest get(String url) {
+        return new GetRequest(url);
+    }
 }

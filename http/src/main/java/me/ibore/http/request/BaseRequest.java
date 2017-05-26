@@ -1,8 +1,11 @@
 package me.ibore.http.request;
 
 /**
- * Created by Administrator on 2017/5/25.
+ * description:
+ * author: Ibore Xie
+ * date: 2017-05-26 00:51
+ * website: ibore.me
  */
 
-public class BaseRequest {
+public interface BaseRequest {
 }

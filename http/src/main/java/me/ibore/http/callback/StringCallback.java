@@ -1,7 +1,6 @@
 package me.ibore.http.callback;
 
-import java.io.IOException;
-
+import me.ibore.http.call.Call;
 import okhttp3.Response;
 
 /**
@@ -11,10 +10,9 @@ import okhttp3.Response;
 public abstract class StringCallback extends AbsCallback<String> {
 
     @Override
-    public String convert(Response response) throws IOException {
+    public String convert(Call call, Response response) throws Exception {
         String s = response.body().string();
         response.close();
         return s;
     }
-
 }

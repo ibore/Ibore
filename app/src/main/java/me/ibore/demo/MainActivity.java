@@ -5,12 +5,16 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import me.ibore.http.XHttp;
-import okhttp3.Request;
+import me.ibore.http.call.Call;
+import me.ibore.http.callback.StringCallback;
+import me.ibore.http.request.BaseRequest;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,12 +34,30 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Request request = new Request.Builder()
-                .url("http://www.so.com")
-                .get()
-                .build();
+        XHttp.get("http://www.so.com").enqueue(new StringCallback() {
+            @Override
+            public void onStart(BaseRequest request) {
+                super.onStart(request);
+                Toast.makeText(getApplicationContext(), "开始了", Toast.LENGTH_SHORT).show();
+            }
 
-        XHttp.get("http://www.so.com").;
+            @Override
+            public void onSuccess(String s) {
+                Log.d("----", s);
+                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(Call call, Exception e) {
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onComplete() {
+                super.onComplete();
+//                Toast.makeText(getApplicationContext(), "结束了", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
