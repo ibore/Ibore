@@ -1,68 +1,34 @@
 package me.ibore.http.request;
 
-import java.io.IOException;
+import java.util.Map;
 
-import me.ibore.http.call.AbsCall;
-import me.ibore.http.callback.AbsCallback;
-import okhttp3.CacheControl;
-import okhttp3.Headers;
 import okhttp3.Request;
-import okhttp3.Response;
+
 
 /**
  * Created by Administrator on 2017/5/25.
  */
 
-public class GetRequest implements BaseRequest {
-
-    private Request.Builder builder;
-    private String url;
-
-    private volatile CacheControl cacheControl; // Lazily initialized.
+public class GetRequest extends BaseRequest {
 
     private Request request;
 
     public GetRequest(String url) {
-        builder = new Request.Builder();
-        this.url = url;
+        super(url);
     }
-
-    public GetRequest headers(Headers headers) {
-        builder.headers(headers);
-        return this;
-    }
-
-    public GetRequest tag(Object tag) {
-        builder.tag(tag);
-        return this;
-    }
-
-    private AbsCall getCall(BaseRequest baseRequest, Request request) {
-        return AbsCall.create(baseRequest, request);
-    }
-
 
     @Override
-    public BaseRequest header(String key, String value) {
-        builder.header(key, value);
-        return this;
-    }
-
-
-    @Override
-    public void execute(AbsCallback absCallback) {
+    public Request generateRequest() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(url);
+        if (url.indexOf('&') > 0 || url.indexOf('?') > 0) sb.append("&");
+        else sb.append("?");
+        for (Map.Entry<String, String> param : params.entrySet()) {
+            sb.append(param.getKey()).append("=").append(param.getValue()).append("&");
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        builder.url(sb.toString()).tag(tag);
         request = builder.build();
-        getCall(this, request).enqueue(absCallback);
-    }
-
-    @Override
-    public Response execute() throws IOException {
-        request = builder.build();
-        return getCall(this, request).execute();
-    }
-
-    @Override
-    public BaseRequest param(String key, String s) {
-        return this;
+        return request;
     }
 }

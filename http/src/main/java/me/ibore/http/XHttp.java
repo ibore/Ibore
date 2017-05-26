@@ -7,6 +7,8 @@ import android.os.Looper;
 
 import me.ibore.http.interceptor.HttpLoggingInterceptor;
 import me.ibore.http.request.GetRequest;
+import me.ibore.http.request.PostRequest;
+import okhttp3.Call;
 import okhttp3.OkHttpClient;
 
 /**
@@ -68,5 +70,49 @@ public class XHttp {
 
     public static GetRequest get(String url) {
         return new GetRequest(url);
+    }
+
+    public static PostRequest post(String url) {
+        return new PostRequest(url);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public void cancelTag(Object tag) {
+        for (Call call : getOkHttpClient().dispatcher().queuedCalls()) {
+            if (tag.equals(call.request().tag())) {
+                call.cancel();
+            }
+        }
+        for (Call call : getOkHttpClient().dispatcher().runningCalls()) {
+            if (tag.equals(call.request().tag())) {
+                call.cancel();
+            }
+        }
+    }
+
+    public void cancelAll() {
+        for (Call call : getOkHttpClient().dispatcher().queuedCalls()) {
+            call.cancel();
+        }
+        for (Call call : getOkHttpClient().dispatcher().runningCalls()) {
+            call.cancel();
+        }
     }
 }

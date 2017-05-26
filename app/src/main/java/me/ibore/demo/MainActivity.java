@@ -33,10 +33,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         XHttp.get("http://apicloud.mob.com/v1/weather/query")
-                .param("key", "")
-                .param("city", "海淀区")
+                .param("key", "15f8f92caa03e")
+                .param("city", "海淀")
                 .param("province", "北京")
+                .tag(this)
                 .execute(new StringCallback() {
             @Override
             public void onStart(BaseRequest request) {
