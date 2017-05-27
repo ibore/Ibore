@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import me.ibore.http.XHttp;
@@ -17,10 +18,13 @@ import me.ibore.http.request.BaseRequest;
 
 public class MainActivity extends AppCompatActivity {
 
+    private TextView textView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        textView = (TextView) findViewById(R.id.textView);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -34,34 +38,36 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        XHttp.get("http://apicloud.mob.com/v1/weather/query")
+        XHttp.post("http://apicloud.mob.com/v1/weather/query")
+                .header("test", "test")
                 .param("key", "15f8f92caa03e")
                 .param("city", "海淀")
-                .param("province", "北京")
+                .param("province", "北京", false)
                 .tag(this)
                 .execute(new StringCallback() {
-            @Override
-            public void onStart(BaseRequest request) {
-                super.onStart(request);
-                Toast.makeText(getApplicationContext(), "开始了", Toast.LENGTH_SHORT).show();
-            }
 
-            @Override
-            public void onSuccess(String s) {
-                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
-            }
+                    @Override
+                    public void onStart(BaseRequest request) {
+                        super.onStart(request);
+                        Toast.makeText(getApplicationContext(), "开始了", Toast.LENGTH_SHORT).show();
+                    }
 
-            @Override
-            public void onError(Call call, Exception e) {
-                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
+                    @Override
+                    public void onSuccess(String s) {
+                        textView.setText(s);
+                    }
 
-            @Override
-            public void onComplete() {
-                super.onComplete();
-                Toast.makeText(getApplicationContext(), "结束了", Toast.LENGTH_SHORT).show();
-            }
-        });
+                    @Override
+                    public void onError(Call call, Exception e) {
+                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        super.onComplete();
+                        Toast.makeText(getApplicationContext(), "结束了", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
 
     }

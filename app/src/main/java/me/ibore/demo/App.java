@@ -2,6 +2,7 @@ package me.ibore.demo;
 
 import android.app.Application;
 
+import me.ibore.http.Params;
 import me.ibore.http.XHttp;
 
 /**
@@ -14,6 +15,9 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         XHttp.init(this);
-        XHttp.getInstance().debug("XHttp");
+        Params params = new Params();
+        params.put("Test", "Test");
+        params.put("Test", "Test");
+        XHttp.getInstance().debug("XHttp").addParams(params);
     }
 }

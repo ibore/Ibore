@@ -20,4 +20,7 @@ public abstract class AbsCallback<T> {
 
     public void onComplete() {}
 
+    public void upProgress(long bytesWritten, long contentLength, float progress, long networkSpeed) {
+
+    }
 }

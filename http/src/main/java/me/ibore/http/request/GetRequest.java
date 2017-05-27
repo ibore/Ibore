@@ -1,8 +1,8 @@
 package me.ibore.http.request;
 
-import java.util.Map;
-
+import me.ibore.http.HttpUtils;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 
 
 /**
@@ -11,24 +11,24 @@ import okhttp3.Request;
 
 public class GetRequest extends BaseRequest {
 
-    private Request request;
+
 
     public GetRequest(String url) {
         super(url);
+        method = "GET";
     }
 
     @Override
-    public Request generateRequest() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(url);
-        if (url.indexOf('&') > 0 || url.indexOf('?') > 0) sb.append("&");
-        else sb.append("?");
-        for (Map.Entry<String, String> param : params.entrySet()) {
-            sb.append(param.getKey()).append("=").append(param.getValue()).append("&");
-        }
-        sb.deleteCharAt(sb.length() - 1);
-        builder.url(sb.toString()).tag(tag);
+    protected RequestBody generateRequestBody() {
+        return null;
+    }
+
+    @Override
+    protected Request generateRequest(RequestBody requestBody) {
+        url = HttpUtils.createUrlFromParams(baseUrl, params);
+        builder.get().url(url).tag(tag).headers(headersBuilder.build());
         request = builder.build();
         return request;
     }
+
 }

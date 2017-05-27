@@ -23,6 +23,8 @@ public class XHttp {
     private OkHttpClient okHttpClient;                          //ok请求的客户端
     private static XHttp xHttp;
 
+    private Params params;
+
     public XHttp() {
         okHttpClientBuilder = new OkHttpClient.Builder();
         mDelivery = new Handler(Looper.getMainLooper());
@@ -90,9 +92,11 @@ public class XHttp {
 
 
 
-
-
-
+    public XHttp addParams(Params params) {
+        if (null == this.params) this.params = new Params();
+        this.params.put(params);
+        return this;
+    }
 
     public void cancelTag(Object tag) {
         for (Call call : getOkHttpClient().dispatcher().queuedCalls()) {
@@ -114,5 +118,9 @@ public class XHttp {
         for (Call call : getOkHttpClient().dispatcher().runningCalls()) {
             call.cancel();
         }
+    }
+
+    public Params getParams() {
+        return params;
     }
 }
