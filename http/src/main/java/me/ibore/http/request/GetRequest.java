@@ -25,7 +25,7 @@ public class GetRequest extends BaseRequest {
 
     @Override
     protected Request generateRequest(RequestBody requestBody) {
-        url = HttpUtils.createUrlFromParams(baseUrl, params);
+        url = HttpUtils.createUrlFromParams(baseUrl, httpParams);
         builder.get().url(url).tag(tag).headers(headersBuilder.build());
         request = builder.build();
         return request;

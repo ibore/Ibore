@@ -12,7 +12,7 @@ import okhttp3.MediaType;
  * Created by Administrator on 2017/5/27.
  */
 
-public final class Params {
+public final class HttpParams {
 
     public static final MediaType MEDIA_TYPE_PLAIN = MediaType.parse("text/plain;charset=utf-8");
     public static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json;charset=utf-8");
@@ -23,7 +23,7 @@ public final class Params {
 
     private Map<String, List<String>> urlParamsMap = new LinkedHashMap<>();
 
-    public void put(Params params) {
+    public void put(HttpParams params) {
         if (null != params && !params.urlParamsMap.isEmpty())this.urlParamsMap.putAll(params.urlParamsMap);
     }
 

@@ -3,9 +3,6 @@ package me.ibore.http;
 import android.os.Build;
 import android.text.TextUtils;
 
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.utils.OkLogger;
-
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
@@ -22,13 +19,13 @@ public class HttpUtils {
 
     private static String userAgent;
 
-    public static String createUrlFromParams(String url, Params params) {
+    public static String createUrlFromParams(String url, HttpParams httpParams) {
         try {
             StringBuilder sb = new StringBuilder();
             sb.append(url);
             if (url.indexOf('&') > 0 || url.indexOf('?') > 0) sb.append("&");
             else sb.append("?");
-            for (Map.Entry<String, List<String>> urlParams : params.getParams().entrySet()) {
+            for (Map.Entry<String, List<String>> urlParams : httpParams.getParams().entrySet()) {
                 List<String> urlValues = urlParams.getValue();
                 for (String value : urlValues) {
                     //对参数进行 utf-8 编码,防止头信息传中文
@@ -39,7 +36,8 @@ public class HttpUtils {
             sb.deleteCharAt(sb.length() - 1);
             return sb.toString();
         } catch (UnsupportedEncodingException e) {
-            OkLogger.e(e);
+
+
         }
         return url;
     }
@@ -64,7 +62,7 @@ public class HttpUtils {
                 Class<?> sysResCls = Class.forName("com.android.internal.R$string");
                 Field webUserAgentField = sysResCls.getDeclaredField("web_user_agent");
                 Integer resId = (Integer) webUserAgentField.get(null);
-                webUserAgent = OkGo.getContext().getString(resId);
+                webUserAgent = XHttp.getContext().getString(resId);
             } catch (Exception e) {
                 // We have nothing to do
             }

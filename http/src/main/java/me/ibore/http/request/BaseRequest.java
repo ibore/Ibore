@@ -3,7 +3,7 @@ package me.ibore.http.request;
 
 import java.io.IOException;
 
-import me.ibore.http.Params;
+import me.ibore.http.HttpParams;
 import me.ibore.http.XHttp;
 import me.ibore.http.call.AbsCall;
 import me.ibore.http.callback.AbsCallback;
@@ -29,7 +29,7 @@ public abstract class BaseRequest {
     protected String method;
     protected String url;
     protected String tag;
-    protected Params params;
+    protected HttpParams httpParams;
     private AbsCallback callback;
 
     public BaseRequest(String url) {
@@ -37,8 +37,8 @@ public abstract class BaseRequest {
         builder = new Request.Builder();
         xHttp = XHttp.getInstance();
         headersBuilder = new Headers.Builder();
-        params = new Params();
-        params.put(xHttp.getParams());
+        httpParams = new HttpParams();
+        httpParams.put(xHttp.getParams());
     }
 
     public BaseRequest tag(Object tag) {
@@ -67,7 +67,7 @@ public abstract class BaseRequest {
     }
 
     public BaseRequest param(String key, String value, boolean... isReplace) {
-        params.put(key, value, isReplace);
+        httpParams.put(key, value, isReplace);
         return this;
     }
 

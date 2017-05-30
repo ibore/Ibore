@@ -17,13 +17,14 @@ import okhttp3.OkHttpClient;
 
 public class XHttp {
 
+    public static final long REFRESH_TIME = 100;
     private static Application context;
     private Handler mDelivery;
     private OkHttpClient.Builder okHttpClientBuilder;           //ok请求的客户端
     private OkHttpClient okHttpClient;                          //ok请求的客户端
     private static XHttp xHttp;
 
-    private Params params;
+    private HttpParams params;
 
     public XHttp() {
         okHttpClientBuilder = new OkHttpClient.Builder();
@@ -47,17 +48,19 @@ public class XHttp {
         return mDelivery;
     }
 
-    public XHttp debug(final String tag) {
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(
-                HttpLoggingInterceptor.Logger.DEFAULT);
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        okHttpClientBuilder.addInterceptor(loggingInterceptor);
+    public XHttp debug(boolean debug) {
+        if (debug) {
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(
+                    HttpLoggingInterceptor.Logger.DEFAULT);
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            okHttpClientBuilder.addInterceptor(loggingInterceptor);
+        }
         return this;
     }
 
     /** 获取全局上下文 */
     public static Context getContext() {
-        if (context == null) throw new IllegalStateException("请先在全局Application中调用 OkGo.init() 初始化！");
+        if (context == null) throw new IllegalStateException("请先在全局Application中调用 XHttp.init() 初始化！");
         return context;
     }
 
@@ -92,9 +95,9 @@ public class XHttp {
 
 
 
-    public XHttp addParams(Params params) {
-        if (null == this.params) this.params = new Params();
-        this.params.put(params);
+    public XHttp addParams(HttpParams httpParams) {
+        if (null == this.params) this.params = new HttpParams();
+        this.params.put(httpParams);
         return this;
     }
 
@@ -120,7 +123,7 @@ public class XHttp {
         }
     }
 
-    public Params getParams() {
+    public HttpParams getParams() {
         return params;
     }
 }

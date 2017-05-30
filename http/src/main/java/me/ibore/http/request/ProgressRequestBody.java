@@ -2,10 +2,9 @@ package me.ibore.http.request;
 
 import android.support.annotation.Nullable;
 
-import com.lzy.okgo.OkGo;
-
 import java.io.IOException;
 
+import me.ibore.http.XHttp;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okio.Buffer;
@@ -74,7 +73,7 @@ public class ProgressRequestBody extends RequestBody {
 
             long curTime = System.currentTimeMillis();
             //每100毫秒刷新一次数据
-            if (curTime - lastRefreshUiTime >= OkGo.REFRESH_TIME || bytesWritten == contentLength) {
+            if (curTime - lastRefreshUiTime >= XHttp.REFRESH_TIME || bytesWritten == contentLength) {
                 //计算下载速度
                 long diffTime = (curTime - lastRefreshUiTime) / 1000;
                 if (diffTime == 0) diffTime += 1;
@@ -87,6 +86,7 @@ public class ProgressRequestBody extends RequestBody {
             }
         }
     }
+
     public interface Listener {
         void onRequestProgress(long bytesWritten, long contentLength, long networkSpeed);
     }

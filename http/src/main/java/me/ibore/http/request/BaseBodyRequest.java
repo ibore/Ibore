@@ -1,11 +1,9 @@
-package me.ibore.http;
-
-import com.lzy.okgo.model.HttpParams;
+package me.ibore.http.request;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import me.ibore.http.request.BaseRequest;
+import me.ibore.http.HttpParams;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -27,7 +25,7 @@ public abstract class BaseBodyRequest extends BaseRequest {
 
 
     public BaseBodyRequest string(String content) {
-        return string(content, Params.MEDIA_TYPE_PLAIN);
+        return string(content, HttpParams.MEDIA_TYPE_PLAIN);
     }
 
     public BaseBodyRequest string(String content, MediaType mediaType) {
@@ -37,18 +35,18 @@ public abstract class BaseBodyRequest extends BaseRequest {
     }
 
     public BaseBodyRequest json(String json) {
-        return string(json, Params.MEDIA_TYPE_JSON);
+        return string(json, HttpParams.MEDIA_TYPE_JSON);
     }
 
     public BaseBodyRequest json(JSONObject jsonObject) {
         this.content = jsonObject.toString();
-        this.mediaType = Params.MEDIA_TYPE_JSON;
+        this.mediaType = HttpParams.MEDIA_TYPE_JSON;
         return this;
     }
 
     public BaseBodyRequest json(JSONArray jsonArray) {
         this.content = jsonArray.toString();
-        this.mediaType = Params.MEDIA_TYPE_JSON;
+        this.mediaType = HttpParams.MEDIA_TYPE_JSON;
         return this;
     }
 
