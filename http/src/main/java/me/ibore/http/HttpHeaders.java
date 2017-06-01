@@ -7,7 +7,7 @@ package me.ibore.http;
  * website: ibore.me
  */
 
-public final class HttpHeaders {
+public final class HttpHeaders implements MultiValue {
 
 
     public static final class Builder {
