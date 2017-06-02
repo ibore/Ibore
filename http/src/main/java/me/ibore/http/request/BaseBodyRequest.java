@@ -3,7 +3,7 @@ package me.ibore.http.request;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import me.ibore.http.HttpParams;
+import me.ibore.http.params.HttpParams;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 

@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import me.ibore.http.params.Params;
+
 /**
  * Created by Administrator on 2017/5/27.
  */
@@ -19,13 +21,13 @@ public class HttpUtils {
 
     private static String userAgent;
 
-    public static String createUrlFromParams(String url, HttpParams httpParams) {
+    public static String createUrlFromParams(String url, Params params) {
         try {
             StringBuilder sb = new StringBuilder();
             sb.append(url);
             if (url.indexOf('&') > 0 || url.indexOf('?') > 0) sb.append("&");
             else sb.append("?");
-            for (Map.Entry<String, List<String>> urlParams : httpParams.getParams().entrySet()) {
+            for (Map.Entry<String, List<String>> urlParams : params.getParams().entrySet()) {
                 List<String> urlValues = urlParams.getValue();
                 for (String value : urlValues) {
                     //对参数进行 utf-8 编码,防止头信息传中文

@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        XHttp.post("http://apicloud.mob.com/v1/weather/query")
+        XHttp.get("http://apicloud.mob.com/v1/weather/query")
                 .header("test", "test")
                 .param("key", "15f8f92caa03e")
                 .param("city", "海淀")

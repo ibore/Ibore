@@ -1,34 +1,18 @@
 package me.ibore.http.request;
 
-import me.ibore.http.HttpUtils;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-
+import me.ibore.http.callback.AbsCallback;
 
 /**
- * Created by Administrator on 2017/5/25.
+ * Created by Administrator on 2017/6/2.
  */
 
-public class GetRequest extends BaseRequest {
+public class GetRequest extends RequestImp {
 
 
 
-    public GetRequest(String url) {
-        super(url);
-        method = "GET";
-    }
 
     @Override
-    protected RequestBody generateRequestBody() {
-        return null;
-    }
+    public void execute(AbsCallback absCallback) {
 
-    @Override
-    protected Request generateRequest(RequestBody requestBody) {
-        url = HttpUtils.createUrlFromParams(baseUrl, httpParams);
-        builder.get().url(url).tag(tag).headers(headersBuilder.build());
-        request = builder.build();
-        return request;
     }
-
 }

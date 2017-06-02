@@ -26,7 +26,7 @@ public class PostRequest extends BaseRequest {
     protected Request generateRequest(RequestBody requestBody) {
         //        url = HttpUtils.createUrlFromParams(baseUrl, params);
         url = baseUrl;
-        builder.post(requestBody).url(url).tag(tag).headers(headersBuilder.build());
+//        builder.post(requestBody).url(url).tag(tag).headers(headersBuilder.build());
         request = builder.build();
         return request;
     }

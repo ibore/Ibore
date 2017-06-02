@@ -1,4 +1,7 @@
-package me.ibore.http.header;
+package me.ibore.http.headers;
+
+import java.util.List;
+import java.util.Map;
 
 import me.ibore.http.map.MultiValuedMap;
 
@@ -10,4 +13,12 @@ import me.ibore.http.map.MultiValuedMap;
  */
 
 public interface Headers extends MultiValuedMap<String, String> {
+
+
+    void addAll(Headers headers);
+
+    void setAll(Headers headers);
+
+    Map<String, List<String>> getHeaders();
+
 }

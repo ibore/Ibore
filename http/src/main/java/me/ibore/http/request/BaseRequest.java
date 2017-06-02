@@ -3,11 +3,13 @@ package me.ibore.http.request;
 
 import java.io.IOException;
 
-import me.ibore.http.HttpParams;
 import me.ibore.http.XHttp;
 import me.ibore.http.call.AbsCall;
 import me.ibore.http.callback.AbsCallback;
-import okhttp3.Headers;
+import me.ibore.http.headers.Headers;
+import me.ibore.http.headers.HttpHeaders;
+import me.ibore.http.params.HttpParams;
+import me.ibore.http.params.Params;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -25,20 +27,22 @@ public abstract class BaseRequest {
     protected XHttp xHttp;
     protected String baseUrl;
     protected Request.Builder builder;
-    protected Headers.Builder headersBuilder;
+
     protected String method;
     protected String url;
     protected String tag;
-    protected HttpParams httpParams;
+
+    protected Headers headers;
+    protected Params params;
     private AbsCallback callback;
 
     public BaseRequest(String url) {
         baseUrl = url;
         builder = new Request.Builder();
         xHttp = XHttp.getInstance();
-        headersBuilder = new Headers.Builder();
-        httpParams = new HttpParams();
-        httpParams.put(xHttp.getParams());
+        headers = new HttpHeaders();
+        params = new HttpParams();
+        params.addAll(xHttp.getParams());
     }
 
     public BaseRequest tag(Object tag) {
@@ -47,27 +51,31 @@ public abstract class BaseRequest {
     }
 
     public BaseRequest header(String name, String value) {
-        headersBuilder.set(name, value);
+        headers.set(name, value);
         return this;
     }
 
     public BaseRequest addHeader(String name, String value) {
-        headersBuilder.add(name, value);
+        headers.add(name, value);
         return this;
     }
 
     public BaseRequest removeHeader(String name) {
-        headersBuilder.removeAll(name);
+        headers.remove(name);
         return this;
     }
 
     public BaseRequest headers(Headers headers) {
-        this.headersBuilder = headers.newBuilder();
+        headers.addAll(headers);
         return this;
     }
 
     public BaseRequest param(String key, String value, boolean... isReplace) {
-        httpParams.put(key, value, isReplace);
+        if (null == isReplace) {
+            params.set(key, value);
+        } else {
+            params.add(key, value);
+        }
         return this;
     }
 
@@ -75,7 +83,6 @@ public abstract class BaseRequest {
 
     protected abstract Request generateRequest(RequestBody requestBody);
 
-    /** 对请求body进行包装，用于回调上传进度 */
     public RequestBody wrapRequestBody(RequestBody requestBody) {
         ProgressRequestBody progressRequestBody = new ProgressRequestBody(requestBody);
         progressRequestBody.setListener(new ProgressRequestBody.Listener() {
