@@ -9,12 +9,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import me.ibore.http.XHttp;
 import me.ibore.http.call.Call;
 import me.ibore.http.callback.StringCallback;
-import me.ibore.http.request.BaseRequest;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,36 +36,51 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        XHttp.get("http://apicloud.mob.com/v1/weather/query")
-                .header("test", "test")
-                .param("key", "15f8f92caa03e")
-                .param("city", "海淀")
-                .param("province", "北京", false)
-                .tag(this)
+        XHttp.post("http://server.jeasonlzy.com/OkHttpUtils/uploadString")
+                .header("111", "1111")
+                .upString("dddd")
                 .execute(new StringCallback() {
-
-                    @Override
-                    public void onStart(BaseRequest request) {
-                        super.onStart(request);
-                        Toast.makeText(getApplicationContext(), "开始了", Toast.LENGTH_SHORT).show();
-                    }
-
                     @Override
                     public void onSuccess(String s) {
-                        textView.setText(s);
+
                     }
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
 
-                    @Override
-                    public void onComplete() {
-                        super.onComplete();
-                        Toast.makeText(getApplicationContext(), "结束了", Toast.LENGTH_SHORT).show();
                     }
                 });
+
+//        XHttp.get("http://apicloud.mob.com/v1/weather/query")
+//                .header("test", "test")
+//                .param("key", "15f8f92caa03e")
+//                .param("city", "海淀")
+//                .param("province", "北京", false)
+//                .tag(this)
+//                .execute(new StringCallback() {
+//
+//                    @Override
+//                    public void onStart() {
+//                        super.onStart();
+//                        Toast.makeText(getApplicationContext(), "开始了", Toast.LENGTH_SHORT).show();
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(String s) {
+//                        textView.setText(s);
+//                    }
+//
+//                    @Override
+//                    public void onError(Call call, Exception e) {
+//                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//                        super.onComplete();
+//                        Toast.makeText(getApplicationContext(), "结束了", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
 
 
     }

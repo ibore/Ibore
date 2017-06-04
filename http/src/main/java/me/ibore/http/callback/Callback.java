@@ -1,16 +1,15 @@
 package me.ibore.http.callback;
 
 import me.ibore.http.call.Call;
-import me.ibore.http.request.BaseRequest;
 import okhttp3.Response;
 
 /**
  * Created by Administrator on 2017/5/25.
  */
 
-public abstract class AbsCallback<T> {
+public abstract class Callback<T> {
 
-    public void onStart(BaseRequest request) {}
+    public void onStart() {}
 
     public abstract T convert(Call call, Response response) throws Exception;
 

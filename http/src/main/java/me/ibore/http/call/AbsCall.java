@@ -1,11 +1,11 @@
 package me.ibore.http.call;
 
+import android.util.Log;
+
 import java.io.IOException;
 
 import me.ibore.http.XHttp;
-import me.ibore.http.callback.AbsCallback;
-import me.ibore.http.request.BaseRequest;
-import okhttp3.Callback;
+import me.ibore.http.callback.Callback;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -19,19 +19,11 @@ import okhttp3.Response;
 public class AbsCall implements Call {
 
     private static AbsCall mCall;
-    private BaseRequest baseRequest;
-    private Request request;
+
     private okhttp3.Call call;
 
-    public AbsCall(BaseRequest baseRequest, Request request) {
-        this.baseRequest = baseRequest;
-        this.request = request;
+    public AbsCall(Request request) {
         call = XHttp.getInstance().getOkHttpClient().newCall(request);
-    }
-
-    @Override
-    public BaseRequest request() {
-        return baseRequest;
     }
 
     @Override
@@ -40,16 +32,16 @@ public class AbsCall implements Call {
     }
 
     @Override
-    public void enqueue(final AbsCallback absCallback) {
-        absCallback.onStart(baseRequest);
-        call.enqueue(new Callback() {
+    public void enqueue(final Callback callback) {
+        callback.onStart();
+        call.enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(okhttp3.Call call, final IOException e) {
                 XHttp.getInstance().getDelivery().post(new Runnable() {
                     @Override
                     public void run() {
-                        absCallback.onError(mCall, e);
-                        absCallback.onComplete();
+                        callback.onError(mCall, e);
+                        callback.onComplete();
                     }
                 });
             }
@@ -58,19 +50,19 @@ public class AbsCall implements Call {
             public void onResponse(okhttp3.Call call, Response response) throws IOException {
                 Object object = null;
                 try {
-                    object = absCallback.convert(mCall, response);
+                    object = callback.convert(mCall, response);
                 } catch (final Exception e) {
                     XHttp.getInstance().getDelivery().post(new Runnable() {
                         @Override
                         public void run() {
-                            absCallback.onError(mCall, e);
+                            callback.onError(mCall, e);
                         }
                     });
                 } finally {
                     XHttp.getInstance().getDelivery().post(new Runnable() {
                         @Override
                         public void run() {
-                            absCallback.onComplete();
+                            callback.onComplete();
                         }
                     });
                 }
@@ -79,7 +71,7 @@ public class AbsCall implements Call {
                 XHttp.getInstance().getDelivery().post(new Runnable() {
                     @Override
                     public void run() {
-                        absCallback.onSuccess(finalObject);
+                        callback.onSuccess(finalObject);
 
                     }
                 });
@@ -103,8 +95,8 @@ public class AbsCall implements Call {
     }
 
 
-    public static AbsCall create(BaseRequest baseRequest, Request request) {
-        mCall = new AbsCall(baseRequest, request);
+    public static AbsCall create(Request request) {
+        mCall = new AbsCall(request);
         return mCall;
     }
 }

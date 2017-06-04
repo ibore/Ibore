@@ -3,14 +3,8 @@ package me.ibore.http;
 import android.os.Build;
 import android.text.TextUtils;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
-import java.net.URLEncoder;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-
-import me.ibore.http.params.Params;
 
 /**
  * Created by Administrator on 2017/5/27.
@@ -21,34 +15,29 @@ public class HttpUtils {
 
     private static String userAgent;
 
-    public static String createUrlFromParams(String url, Params params) {
-        try {
-            StringBuilder sb = new StringBuilder();
-            sb.append(url);
-            if (url.indexOf('&') > 0 || url.indexOf('?') > 0) sb.append("&");
-            else sb.append("?");
-            for (Map.Entry<String, List<String>> urlParams : params.getParams().entrySet()) {
-                List<String> urlValues = urlParams.getValue();
-                for (String value : urlValues) {
-                    //对参数进行 utf-8 编码,防止头信息传中文
-                    String urlValue = URLEncoder.encode(value, "UTF-8");
-                    sb.append(urlParams.getKey()).append("=").append(urlValue).append("&");
-                }
-            }
-            sb.deleteCharAt(sb.length() - 1);
-            return sb.toString();
-        } catch (UnsupportedEncodingException e) {
-
-
-        }
-        return url;
-    }
-
-//    /** 通用的拼接请求头 */
-//    public static Headers appendHeaders(Headers.Builder builder) {
-//        builder.build().toMultimap()
+//    public static String createUrlFromParams(String url, Params params) {
+//        try {
+//            StringBuilder sb = new StringBuilder();
+//            sb.append(url);
+//            if (url.indexOf('&') > 0 || url.indexOf('?') > 0) sb.append("&");
+//            else sb.append("?");
+//            for (Map.Entry<String, List<String>> urlParams : params.getParams().entrySet()) {
+//                List<String> urlValues = urlParams.getValue();
+//                for (String value : urlValues) {
+//                    //对参数进行 utf-8 编码,防止头信息传中文
+//                    String urlValue = URLEncoder.encode(value, "UTF-8");
+//                    sb.append(urlParams.getKey()).append("=").append(urlValue).append("&");
+//                }
+//            }
+//            sb.deleteCharAt(sb.length() - 1);
+//            return sb.toString();
+//        } catch (UnsupportedEncodingException e) {
 //
+//
+//        }
+//        return url;
 //    }
+
 
     public static void setUserAgent(String userAgent) {
         HttpUtils.userAgent = userAgent;

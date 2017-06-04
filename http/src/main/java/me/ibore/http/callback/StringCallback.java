@@ -7,7 +7,7 @@ import okhttp3.Response;
  * Created by Administrator on 2017/5/25.
  */
 
-public abstract class StringCallback extends AbsCallback<String> {
+public abstract class StringCallback extends Callback<String> {
 
     @Override
     public String convert(Call call, Response response) throws Exception {

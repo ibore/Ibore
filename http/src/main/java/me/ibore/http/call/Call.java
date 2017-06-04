@@ -2,8 +2,7 @@ package me.ibore.http.call;
 
 import java.io.IOException;
 
-import me.ibore.http.callback.AbsCallback;
-import me.ibore.http.request.BaseRequest;
+import me.ibore.http.callback.Callback;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -16,11 +15,9 @@ import okhttp3.Response;
 
 public interface Call<T> {
 
-    BaseRequest request();
-
     Response execute() throws IOException;
 
-    void enqueue(AbsCallback absCallback);
+    void enqueue(Callback callback);
 
     void cancel();
 

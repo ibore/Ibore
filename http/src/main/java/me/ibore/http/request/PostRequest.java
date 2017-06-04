@@ -1,6 +1,6 @@
 package me.ibore.http.request;
 
-import okhttp3.Request;
+
 import okhttp3.RequestBody;
 
 /**
@@ -10,25 +10,17 @@ import okhttp3.RequestBody;
  * website: ibore.me
  */
 
-public class PostRequest extends BaseRequest {
+public class PostRequest extends BodyRequest<PostRequest> {
 
     public PostRequest(String url) {
-        super(url);
-        method = "POST";
+        super(url, "POST");
     }
 
     @Override
-    protected RequestBody generateRequestBody() {
-        return null;
-    }
-
-    @Override
-    protected Request generateRequest(RequestBody requestBody) {
-        //        url = HttpUtils.createUrlFromParams(baseUrl, params);
-        url = baseUrl;
-//        builder.post(requestBody).url(url).tag(tag).headers(headersBuilder.build());
-        request = builder.build();
-        return request;
+    protected okhttp3.Request generateRequest(RequestBody requestBody) {
+        okhttp3.Request.Builder builder = new okhttp3.Request.Builder();
+        builder.post(generateRequestBody()).url(getUrl()).tag(getTag()).headers(generateHeaders());
+        return builder.build();
     }
 
 }

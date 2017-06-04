@@ -6,8 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import me.ibore.http.interceptor.HttpLoggingInterceptor;
-import me.ibore.http.params.HttpParams;
-import me.ibore.http.request.GetRequests;
+import me.ibore.http.request.GetRequest;
 import me.ibore.http.request.PostRequest;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
@@ -25,7 +24,7 @@ public class XHttp {
     private OkHttpClient okHttpClient;                          //ok请求的客户端
     private static XHttp xHttp;
 
-    private HttpParams params;
+    private HttpParams httpParams;
 
     public XHttp() {
         okHttpClientBuilder = new OkHttpClient.Builder();
@@ -74,8 +73,8 @@ public class XHttp {
         return okHttpClient;
     }
 
-    public static GetRequests get(String url) {
-        return new GetRequests(url);
+    public static GetRequest get(String url) {
+        return new GetRequest(url);
     }
 
     public static PostRequest post(String url) {
@@ -97,8 +96,8 @@ public class XHttp {
 
 
     public XHttp addParams(HttpParams httpParams) {
-        if (null == this.params) this.params = new HttpParams();
-        this.params.addAll(httpParams);
+        if (null == this.httpParams) this.httpParams = new HttpParams();
+        this.httpParams.putAll(httpParams);
         return this;
     }
 
@@ -125,6 +124,6 @@ public class XHttp {
     }
 
     public HttpParams getParams() {
-        return params;
+        return httpParams;
     }
 }

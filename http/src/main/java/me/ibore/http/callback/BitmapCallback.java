@@ -10,7 +10,7 @@ import okhttp3.Response;
  * Created by Administrator on 2017/5/25.
  */
 
-public abstract class BitmapCallback extends AbsCallback<Bitmap> {
+public abstract class BitmapCallback extends Callback<Bitmap> {
     @Override
     public Bitmap convert(Call call, Response response) throws Exception {
         Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
