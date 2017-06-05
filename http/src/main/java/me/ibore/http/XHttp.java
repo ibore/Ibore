@@ -6,8 +6,12 @@ import android.os.Handler;
 import android.os.Looper;
 
 import me.ibore.http.interceptor.HttpLoggingInterceptor;
+import me.ibore.http.request.DeleteRequest;
 import me.ibore.http.request.GetRequest;
+import me.ibore.http.request.HeadRequest;
+import me.ibore.http.request.OptionsRequest;
 import me.ibore.http.request.PostRequest;
+import me.ibore.http.request.PutRequest;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 
@@ -81,6 +85,21 @@ public class XHttp {
         return new PostRequest(url);
     }
 
+    public static HeadRequest head(String url) {
+        return new HeadRequest(url);
+    }
+
+    public static OptionsRequest options(String url) {
+        return new OptionsRequest(url);
+    }
+
+    public static PutRequest put(String url) {
+        return new PutRequest(url);
+    }
+
+    public static DeleteRequest delete(String url) {
+        return new DeleteRequest(url);
+    }
 
 
 

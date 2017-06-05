@@ -1,6 +1,7 @@
 package me.ibore.http.callback;
 
 import me.ibore.http.call.Call;
+import okhttp3.Request;
 import okhttp3.Response;
 
 /**
@@ -9,7 +10,7 @@ import okhttp3.Response;
 
 public abstract class Callback<T> {
 
-    public void onStart() {}
+    public void onStart(Request request) {}
 
     public abstract T convert(Call call, Response response) throws Exception;
 

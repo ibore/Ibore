@@ -4,12 +4,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.util.LinkedHashMap;
-import java.util.List;
 
 import me.ibore.http.HttpParams;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+
+import static me.ibore.http.HttpParams.MEDIA_TYPE_STREAM;
 
 /**
  * description:
@@ -27,6 +27,11 @@ public abstract class BodyRequest<R extends BodyRequest> extends Request<R> {
 
     public BodyRequest(String url, String method) {
         super(url, method);
+    }
+
+    public R upFile(File file) {
+        this.requestBody = RequestBody.create(MEDIA_TYPE_STREAM, file);
+        return (R) this;
     }
 
     public R requestBody(RequestBody requestBody) {
@@ -64,7 +69,7 @@ public abstract class BodyRequest<R extends BodyRequest> extends Request<R> {
 
     public R upBytes(byte[] bytes) {
         this.bytes = bytes;
-        this.mediaType = HttpParams.MEDIA_TYPE_STREAM;
+        this.mediaType = MEDIA_TYPE_STREAM;
         return (R) this;
     }
 
@@ -73,10 +78,10 @@ public abstract class BodyRequest<R extends BodyRequest> extends Request<R> {
         if (null != requestBody) return requestBody;
         if (null != content && null != mediaType) return RequestBody.create(mediaType, content);
         if (null != bytes && null != mediaType) return RequestBody.create(mediaType, bytes);
-        return generateMultipartRequestBody(getParams().getParamsMap());
+        return generateMultipartRequestBody(getParams());
     }
 
-    private RequestBody generateMultipartRequestBody(LinkedHashMap<String, List<String>> params) {
+    private RequestBody generateMultipartRequestBody(HttpParams params) {
 
         return null;
 //        if (params.fileParamsMap.isEmpty()) {

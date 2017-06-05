@@ -3,6 +3,8 @@ package me.ibore.http.request;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import me.ibore.http.HttpHeaders;
@@ -98,10 +100,10 @@ public abstract class Request<R extends Request> {
         return tag;
     }
 
-    protected okhttp3.Headers generateHeaders() {
+    protected okhttp3.Headers generateHeaders(HttpHeaders headers) {
         okhttp3.Headers.Builder builder = new okhttp3.Headers.Builder();
         try {
-            for (Map.Entry<String, String> urlParams : getHeaders().getHeadersMap().entrySet()) {
+            for (Map.Entry<String, String> urlParams : headers.getHeadersMap().entrySet()) {
                 String value = urlParams.getValue();
                 String urlValue = URLEncoder.encode(value, "UTF-8");
                 builder.add(urlParams.getKey(), urlValue);
@@ -112,15 +114,37 @@ public abstract class Request<R extends Request> {
         return builder.build();
     }
 
+    protected String generateUrl(String url, LinkedHashMap<String, List<String>> params) {
+        try {
+            StringBuilder sb = new StringBuilder();
+            sb.append(url);
+            if (url.indexOf('&') > 0 || url.indexOf('?') > 0) sb.append("&");
+            else sb.append("?");
+            for (Map.Entry<String, List<String>> urlParams : params.entrySet()) {
+                List<String> urlValues = urlParams.getValue();
+                for (String value : urlValues) {
+                    //对参数进行 utf-8 编码,防止头信息传中文
+                    String urlValue = URLEncoder.encode(value, "UTF-8");
+                    sb.append(urlParams.getKey()).append("=").append(urlValue).append("&");
+                }
+            }
+            sb.deleteCharAt(sb.length() - 1);
+            return sb.toString();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return url;
+    }
+
     public Response execute() throws IOException {
         return null;
     }
 
     public void execute(Callback callback) {
-        AbsCall.create(generateRequest(generateRequestBody())).enqueue(callback);
+        AbsCall.create(generateRequest()).enqueue(callback);
     }
 
-    protected abstract okhttp3.Request generateRequest(RequestBody requestBody);
+    protected abstract okhttp3.Request generateRequest();
 
     protected abstract RequestBody generateRequestBody();
 

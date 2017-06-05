@@ -1,7 +1,5 @@
 package me.ibore.http.call;
 
-import android.util.Log;
-
 import java.io.IOException;
 
 import me.ibore.http.XHttp;
@@ -19,10 +17,12 @@ import okhttp3.Response;
 public class AbsCall implements Call {
 
     private static AbsCall mCall;
+    private Request request;
 
     private okhttp3.Call call;
 
     public AbsCall(Request request) {
+        this.request = request;
         call = XHttp.getInstance().getOkHttpClient().newCall(request);
     }
 
@@ -33,7 +33,7 @@ public class AbsCall implements Call {
 
     @Override
     public void enqueue(final Callback callback) {
-        callback.onStart();
+        callback.onStart(request);
         call.enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(okhttp3.Call call, final IOException e) {

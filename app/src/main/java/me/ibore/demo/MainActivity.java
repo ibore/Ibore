@@ -1,14 +1,18 @@
 package me.ibore.demo;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import java.io.File;
 
 import me.ibore.http.XHttp;
 import me.ibore.http.call.Call;
@@ -36,18 +40,24 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        XHttp.post("http://server.jeasonlzy.com/OkHttpUtils/uploadString")
+        XHttp.post("http://server.jeasonlzy.com/OkHttpUtils/upload")
                 .header("111", "1111")
-                .upString("dddd")
+                .upFile(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/image001.jpg"))
                 .execute(new StringCallback() {
+
                     @Override
                     public void onSuccess(String s) {
-
+                        textView.setText(s);
                     }
 
                     @Override
                     public void onError(Call call, Exception e) {
 
+                    }
+
+                    @Override
+                    public void upProgress(long bytesWritten, long contentLength, float progress, long networkSpeed) {
+                        Log.d("----", progress + "");
                     }
                 });
 

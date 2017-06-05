@@ -1,8 +1,6 @@
 package me.ibore.http.request;
 
 
-import okhttp3.RequestBody;
-
 /**
  * description:
  * author: Ibore Xie
@@ -10,16 +8,16 @@ import okhttp3.RequestBody;
  * website: ibore.me
  */
 
-public class PostRequest extends BodyRequest<PostRequest> {
+public final class PostRequest extends BodyRequest<PostRequest> {
 
     public PostRequest(String url) {
         super(url, "POST");
     }
 
     @Override
-    protected okhttp3.Request generateRequest(RequestBody requestBody) {
+    protected okhttp3.Request generateRequest() {
         okhttp3.Request.Builder builder = new okhttp3.Request.Builder();
-        builder.post(generateRequestBody()).url(getUrl()).tag(getTag()).headers(generateHeaders());
+        builder.post(generateRequestBody()).url(getUrl()).tag(getTag()).headers(generateHeaders(getHeaders()));
         return builder.build();
     }
 
